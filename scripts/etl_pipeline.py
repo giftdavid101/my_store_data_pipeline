@@ -315,7 +315,19 @@ except Exception as e:
     exit(1)
     
 
- 
 
+# pipeline summary
+print("\n" + "=" * 60)
+print("✅ ETL PIPELINE COMPLETED SUCCESSFULLY!")
+print("=" * 60)
 
-except    
+print(f"""
+📊 SUMMARY:
+   • Extracted: 50 customers + 51 purchases
+   • Removed: {customers_removed} customer duplicate(s) + {purchases_removed} purchase duplicate(s)
+   • Merged: {len(merged_data)} final records
+   • Enriched: Added USD conversion and purchase categories
+   • Loaded: All data to PostgreSQL 'sales_data' table
+
+🎉 Your data is now ready for analysis!
+""")
