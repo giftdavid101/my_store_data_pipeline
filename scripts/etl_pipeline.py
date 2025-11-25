@@ -408,3 +408,45 @@ plt.savefig('../top_customers_spending.png', dpi=300, bbox_inches='tight')
 print("   ✅ Saved to: top_customers_spending.png\n")
 
 plt.show()
+
+# Visualizations: purchases by location
+print("📊 Creating Visualization 2: Purchases by Location...")
+
+query2 = """
+    SELECT
+        location
+        COUNT(*) AS purchase_count
+    FROM sales_data
+    GROUP BY location
+    ORDER BY purchase_count DESC
+"""
+
+df_location = pd.read_sql(query2, engine)
+
+fig, (ax1, ax2) = plt.subplots(1,2, figsize=(16, 6))
+# bar chart
+ax1.bar(
+    df_location['location'],
+    df_location['purchase_count'],
+    color='coral',
+    edgecolor='black'
+)
+
+ax1.set_xlabel('Location', fontsize=12, fontweight='bold')
+ax1.set_ylabel('Number of Purchases', fontsize=12, fontweight='bold')
+ax1.set_title('Purchases by Location (Bar Chart)', fontsize=14, fontweight='bold')
+ax1.tick_params(axis='x', rotation=45)
+
+# pie chart
+ax2.pie(
+    df_location['purchase_count'],
+    labels=df_location['location'],
+    autopct='%1.1f%%',
+    startangle=90,
+    colors=plt.cm.Paired.colors
+)
+ax2.set_title('Purchase Distribution by Location (Pie Chart)', fontsize=14, fontweight='bold')
+plt.tight_layout()
+plt.savefig('../purchases_by_location.png', dpi=300, bbox_inches='tight')
+print("   ✅ Saved to: purchases_by_location.png\n")
+plt.show()
