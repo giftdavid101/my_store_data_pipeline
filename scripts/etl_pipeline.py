@@ -300,8 +300,20 @@ try:
     engine.dispose()
     print("   ✅ Database connection closed")
 
+except SQLAlchemyError as e:
+    # handle database error
+    print(f"\n❌ DATABASE ERROR: {e}")
+    print("\n💡 TROUBLESHOOTING TIPS:")
+    print("   1. Check PostgreSQL is running: sudo service postgresql status")
+    print("   2. Verify database exists: psql -l")
+    print("   3. Check username and password are correct")
+    print("   4. Ensure database 'data_engineering' was created")
+    exit(1)
 
-
+except Exception as e:
+    print(f"\n❌ ERROR: Unexpected error during loading - {e}")
+    exit(1)
+    
 
  
 
