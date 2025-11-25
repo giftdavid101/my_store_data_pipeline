@@ -242,3 +242,11 @@ except Exception as e:
 # Add email domain extration
 merged_data['email_domain'] = merged_data['email'].str.split('@').str[1]
 print("✅ Added 'email_domain' column")
+
+# Step 3: Load data to Postgresql
+
+print("\n" + "=" * 60)
+print("STEP 3: LOADING DATA TO POSTGRESQL")
+print("=" * 60)
+
+from sqlalchemy import create_engine
