@@ -249,21 +249,32 @@ print("\n" + "=" * 60)
 print("STEP 3: LOADING DATA TO POSTGRESQL")
 print("=" * 60)
 
+import os
 from sqlalchemy import create_engine
 from sqlalchemy.exc import SQLAlchemyError
-import os
 from dotenv import load_dotenv
 
+load_dotenv()
+
 try:
+    #Create database connection
+    print("\n🔌 Connecting to PostgreSQL database...")
 
- #Create database connection
- print("\n🔌 Connecting to PostgreSQL database...")
 
- # configuration
-    DB_USER = "postgres"                # Your PostgreSQL username
-    DB_PASSWORD = "Jesus101"            # Your PostgreSQL password
-    DB_HOST = "localhost"               # Database server (localhost for local)
-    DB_PORT = "5432"                    # PostgreSQL default port
-    DB_NAME = "data_engineering"
+
+    # configuration
+    DB_USER = os.getenv('DB_USER')               # Your PostgreSQL username
+    DB_PASSWORD = os.getenv('DB_PASSWORD')           # Your PostgreSQL password
+    DB_HOST = os.getenv('DB_HOST')            # Database server (localhost for local)
+    DB_PORT = os.getenv('DB_PORT')                    # PostgreSQL default port
+    DB_NAME = os.getenv('DB_NAME')
+
+    connection_string = f"postgresql+psycopg2://{DB_USER}:{DB_PASSWORD}@{DB_HOST}:{DB_PORT}/{DB_NAME}"
+    engine = create_engine(connection_string)
+    #test the connection
+    with engine.connect() as connection:
+        print("   ✅ Database connection successful!")
+ 
+
 
 except    
