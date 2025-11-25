@@ -334,4 +334,77 @@ print(f"""
 
 # visualization
 
+import pandas as pd                    
+import matplotlib.pyplot as plt        
+from sqlalchemy import create_engine   
+from sqlalchemy.exc import SQLAlchemyError
 
+# configure matplotlib
+plt.style.use('seaborn-v0_8-darkgrid')
+plt.rcParams['figure.figsize'] = (12, 6)
+
+# connect to database to get data for visualization
+print("=" * 60)
+print("CONNECTING TO POSTGRESQL DATABASE")
+print("=" * 60)
+
+try:
+    DB_USER = os.getenv('DB_USER')               # Your PostgreSQL username
+    DB_PASSWORD = os.getenv('DB_PASSWORD')           # Your PostgreSQL password
+    DB_HOST = os.getenv('DB_HOST')            # Database server (localhost for local)
+    DB_PORT = os.getenv('DB_PORT')                    # PostgreSQL default port
+    DB_NAME = os.getenv('DB_NAME')
+
+    connection_string  = "postgresql+psycopg2://postgres:Jesus101@localhost:5432/data_engineering"
+
+    engine = create_engine(connection_string)
+    with engine.connect():
+        print("✅ Database connection successful!\n")
+except SQLAlchemyError as e:
+    print(f"❌ Database connection failed: {e}")
+    exit(1)
+
+# Visualizations: Top 10 customers that spent high amount
+
+print("📊 Creating Visualization 1: Top 10 Customers by Spending...")
+
+# SQL query to get top 10 customers
+query1 = """
+    SELECT 
+        customer_name,
+        SUM(amount_usd) AS total_spent_usd
+    FROM sales_data
+    GROUP BY customer_name
+    ORDER BY total_spent_usd DESC
+    LIMIT 10;
+"""
+
+df_top_customers = pd.read_sql(query1, engine)
+
+#create bar chart
+
+plt.figure(figsize=(12,6))
+plt.barh(
+    df_top_customers['customer_name'],
+    df_top_customers['total_spent_usd'],
+    color='steelblue',
+    edgecolor='black'
+)
+plt.xlabel('Total Spent (USD)', fontsize=12, fontweight='bold')
+plt.ylabel('Customer Name', fontsize=12, fontweight='bold')
+plt.title('Top 10 Customers by Total Spending', fontsize=14, fontweight='bold')
+
+
+for index, value in enumerate(df_top_customers['total_spent_usd']):
+    plt.text(
+        value,
+        index,
+        f'${value:.2f}',
+        va='center',
+        fontsize=10
+    )
+plt.tight_layout()
+plt.savefig('../top_customers_spending.png', dpi=300, bbox_inches='tight')
+print("   ✅ Saved to: top_customers_spending.png\n")
+
+plt.show()
