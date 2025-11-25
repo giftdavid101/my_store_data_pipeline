@@ -450,3 +450,48 @@ plt.tight_layout()
 plt.savefig('../purchases_by_location.png', dpi=300, bbox_inches='tight')
 print("   ✅ Saved to: purchases_by_location.png\n")
 plt.show()
+
+# Visualization: purchase by amount 
+
+print("📊 Creating Visualization 3: Purchase Amount Distribution...")
+query3 = """
+    SELECT amount_usd FROM sales_data;
+"""
+df_amounts = pd.read_sql(query3, engine)
+
+# histogram
+plt.figure(figsize=(12, 6))
+plt.hist(
+    df_amounts['amount_usd'],
+    bins=15,
+    color='lightgreen',
+    edgecolor='black',
+    alpha=0.7  # Transparency (0=invisible, 1=opaque)
+)
+# vertical lines for mean and median
+mean_amount = df_amounts['amount_usd'].mean()
+median_amount = df_amounts['amount_usd'].median()
+plt.axvline(
+    mean_amount,
+    color='red',
+    linestyle='--',         # Dashed line
+    linewidth=2,
+    label=f'Mean: ${mean_amount:.2f}'
+)
+plt.axvline(
+    median_amount,
+    color='blue',
+    linestyle='--',
+    linewidth=2,
+    label=f'Median: ${median_amount:.2f}'
+)
+plt.xlabel('Purchase Amount (USD)', fontsize=12, fontweight='bold')
+plt.ylabel('Frequency', fontsize=12, fontweight='bold')
+plt.title('Distribution of Purchase Amounts', fontsize=14, fontweight='bold')
+plt.legend()  # Show the legend (mean/median labels)
+plt.grid(axis='y', alpha=0.3)
+
+plt.tight_layout()
+plt.savefig('../amount_distribution.png', dpi=300, bbox_inches='tight')
+print("   ✅ Saved to: amount_distribution.png\n")
+plt.show()
