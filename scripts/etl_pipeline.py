@@ -250,3 +250,20 @@ print("STEP 3: LOADING DATA TO POSTGRESQL")
 print("=" * 60)
 
 from sqlalchemy import create_engine
+from sqlalchemy.exc import SQLAlchemyError
+import os
+from dotenv import load_dotenv
+
+try:
+
+ #Create database connection
+ print("\n🔌 Connecting to PostgreSQL database...")
+
+ # configuration
+    DB_USER = "postgres"                # Your PostgreSQL username
+    DB_PASSWORD = "Jesus101"            # Your PostgreSQL password
+    DB_HOST = "localhost"               # Database server (localhost for local)
+    DB_PORT = "5432"                    # PostgreSQL default port
+    DB_NAME = "data_engineering"
+
+except    
