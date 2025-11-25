@@ -274,6 +274,35 @@ try:
     #test the connection
     with engine.connect() as connection:
         print("   ✅ Database connection successful!")
+
+    # Load data to table
+    print("\n💾 Loading data to 'sales_data' table...")
+    merged_data.to_sql(
+        'sales_data',           # Table name
+        engine,                 # Database connection
+        if_exists='replace',    # Drop and recreate if exists
+        index=False             # Don't include DataFrame index
+    )
+    print(f"   ✅ Data loaded successfully!")
+    print(f"   📊 Table: sales_data")
+    print(f"   📊 Rows loaded: {len(merged_data)}")
+    print(f"   📊 Columns: {len(merged_data.columns)}")
+
+    # verify data was loaded by querying
+    print("\n🔍 Verifying data in database...")
+
+    query = "SELECT COUNT(*) as row_count FROM sales_data;"
+    result = pd.read_sql(query, engine)
+
+    print(f"   ✅ Rows in database: {result['row_count'][0]}")
+
+    # Close the database connection
+    engine.dispose()
+    print("   ✅ Database connection closed")
+
+
+
+
  
 
 
