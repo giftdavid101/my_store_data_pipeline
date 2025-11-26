@@ -3,14 +3,17 @@ import json
 import os   
 
 # first
-etl_con = os.path.dirname(os.path.abspath(__file__))
-os.path.join("folder", "subfolder","file.txt")
+script_dir = os.path.dirname(os.path.abspath(__file__))
+data_dir = os.path.join(script_dir, '..', 'data')
+
+data_dir = os.path.join("folder", "subfolder","file.txt")
+
 print("=" * 60)
 print("STEP 1: EXTRACTING DATA FROM SOURCES")
 print("=" * 60)
 
 try:
-    customers_path = os.path.join(etl_con, 'customer.csv')
+    customers_path = os.path.join(data_dir, 'customer.csv')
     customers = pd.read_csv(customers_path)
     print("\n✅ Customers data loaded successfully")
     print(f"   Shape: {customers.shape}")
@@ -23,7 +26,7 @@ except FileNotFoundError:
 
 # Extract 
 try:
-    purchases_path = os.path.join(etl_con, 'purchases.json')
+    purchases_path = os.path.join(data_dir, 'purchases.json')
 
     with open(purchases_path, 'r') as file:
         purchase_data = json.load(file)
